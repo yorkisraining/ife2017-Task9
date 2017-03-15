@@ -1,0 +1,73 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+			
+.wrap {
+	position: relative;
+}
+			
+.input {
+	width: 50%;
+	background: #272822;
+	position: absolute;
+}
+			
+.output {
+	width: 50%;
+	position: absolute;
+	right: 0;
+}
+
+.row-num {
+	width: 5%;
+	height: 100%;
+	color: #fff;
+	background: #2f3129;
+	position: relative;
+	top: 0;
+	float: left;
+}
+
+.row-list {
+	display: inline-block;
+	width: 95%;
+	height: 100%;
+	position: relative;
+}
+
+.num {
+	box-sizing: border-box;
+	width: 100%;
+	text-align: center;
+	line-height: 15px;
+	height: 15px;
+	font-size: 8px;
+	background: #191916;
+}
+
+.rows {
+	height: 15px;
+	line-height: 15px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background: #49483e;
+}
+
+.text {
+	color: #fff;
+	position: absolute;
+	z-index: 9999;
+	background: #49483e;
+	height: 15px;
+	line-height: 15px;
+	width: 95%;
+	border: none;
+	resize: none;
+	right: 0;
+	outline: none;
+	padding: 0 5px;
+	box-sizing: border-box;
+}
