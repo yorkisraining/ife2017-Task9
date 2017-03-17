@@ -50,9 +50,6 @@
 .rows {
 	height: 15px;
 	line-height: 15px;
-	position: absolute;
-	top: 0;
-	left: 0;
 	width: 100%;
 	background: #49483e;
 }
@@ -77,4 +74,12 @@ span {
 	color: #fff;
 	padding: 0 5px;
 	line-height: 15px;
+}
+
+.outext {
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	padding: 0 10px;
+	font-size: 20px;
 }
