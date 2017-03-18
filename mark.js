@@ -36,6 +36,7 @@ function mark(row) {
 			var div = document.createElement('div');
 			div.setAttribute('class', 'rows');
 			var span = document.createElement('span');
+			span.setAttribute('class', 'inspan');
 			div.appendChild(span);
 			//$('.row-list')[0].appendChild(div);
 			$('.rows:eq(' + t + ')').after(div);
@@ -43,14 +44,14 @@ function mark(row) {
 			// 添加列表数字
 			$('.row-num').append('<div class="nums">' + row.length + '</div>');
 			//添加右侧div
-			$('.output:eq(0)').append('<div class="outext"></div>');
+			$('.output:eq(0)').append('<div class="outext"><span class="outspan"></span></div>');
 		}
 		
 		// backspace
 		if (e.keyCode == 8) {
 			var nowt = parseInt($('#textarea').css('top'));
-			var i = $('span:eq(' + nowt/15 + ')').html();
-			var val = $('span:eq('+ (nowt/15-1) + ')').html(val);
+			var i = $('.inspan:eq(' + nowt/15 + ')').html();
+			var val = $('inspan:eq('+ (nowt/15-1) + ')').html(val);
 			if (i == '' && nowt/15 != 0) {
 				//拦截删除
 				e.cancelBubble = true;
@@ -76,7 +77,7 @@ function mark(row) {
 		// up
 		if (e.keyCode == 38) {
 			var t = parseInt($('#textarea').css('top'));
-			var val = $('span:eq('+ (t/15-1) + ')').html(val);
+			var val = $('.inspan:eq('+ (t/15-1) + ')').html(val);
 			if (t != 0) {
 				$('#textarea').css('top', t - 15);
 				$('#textarea').val(val);
@@ -86,7 +87,7 @@ function mark(row) {
 		// down
 		if (e.keyCode == 40) {
 			var t = parseInt($('#textarea').css('top'));
-			var val = $('span:eq('+ (t/15+1) + ')').html(val);
+			var val = $('.inspan:eq('+ (t/15+1) + ')').html(val);
 			if (t/15 != row.length-1) {
 				$('#textarea').css('top', t + 15);
 				$('#textarea').val(val);
@@ -99,7 +100,7 @@ function addText(row) {
 	$('textarea').keyup(function() {
 		var val = $('textarea').val();
 		var nowNum = parseInt($('#textarea').css('top'))/15;
-		$('span:eq('+ nowNum + ')').html(val);
+		$('.inspan:eq('+ nowNum + ')').html(val);
 	});
 }
 
@@ -107,8 +108,63 @@ function addText(row) {
 function showContent() {
 	$('#textarea').keyup(function() {
 		var t = parseInt($('#textarea').css('top'))/15;
-		var val = $('span:eq(' + t + ')').html();
-		$('.outext:eq(' + t + ')').html(val);
+		var val = $('.inspan:eq(' + t + ')').html();
+		var vals = val;
+		//正则匹配
+		//h1
+		var h1 = /#\S{1,}/.test(vals);
+		var h2 = /#{2}\S{1,}/.test(vals);
+		var h3 = /#{3}\S{1,}/.test(vals);
+		var h4 = /#{4}\S{1,}/.test(vals);
+		var h5 = /#{5}\S{1,}/.test(vals);
+		var h6 = /#{6}\S{1,}/.test(vals);
+		var p = /<p>\S+<\/p>/.test(vals);
+		var br = /\S+(<\/br>)/.test(vals);
+		var lis = /(\*|\-|\+)\s+\S+/.test(vals);
+		var ols = /\d+\.\s+\S+/.test(vals);
+		var italic = /(\*|\-)+(\s)*\S+(\s)*(\*|\-)+/.test(vals);
+		var quoteInline = /(`+)\s*\S+\s*(`+)/.test(vals);
+		if(h1) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h1 outext background normal');
+			vals = val.replace(/#+/, '');
+		}
+		if(h2) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h2 outext background normal');
+			vals = val.replace(/#+/, '');
+		}
+		if(h3) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h3 outext background normal');
+			vals = val.replace('###', '');
+		}
+		if(h4) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h4 outext background normal');
+			vals = val.replace(/#+/, '');
+		}
+		if(h5) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h5 outext background normal');
+			vals = val.replace(/#+/, '');
+		}
+		if(h6) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('h6 outext background normal');
+			vals = val.replace(/#+/, '');
+		}
+		if(italic) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('italic outext background');
+			vals = val.replace(/(\*|\-)+([^"]*)(\*|\-)/, '$2');
+		}
+		if(quoteInline) {
+			$('.outspan:eq(' + t + ')').removeClass();
+			$('.outspan:eq(' + t + ')').addClass('quoteInline outext normal');
+			vals = val.replace(/`+([^"]*)`+/, '$1');
+		}
+		$('.outspan:eq(' + t + ')').html(vals);
 	});
 }
 
@@ -117,17 +173,12 @@ function mouseClick(row) {
 	addEventListener('click', function(e) {
 		var e = e || window.event;
 		var t = Math.floor(e.clientY / 15);
-		var val = $('span:eq(' + t +')').html();
+		var val = $('.inspan:eq(' + t +')').html();
 		console.log(t);
 		console.log(val);
-		if (t <= row.length) {
+		if (t < row.length) {
 			$('#textarea').css('top', t*15);
 			$('#textarea').val(val);
 		}
 	});
-}
-
-//正则编译
-function regex() {
-	
 }

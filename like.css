@@ -70,16 +70,68 @@
 	box-sizing: border-box;
 }
 
-span {
+.inspan {
 	color: #fff;
 	padding: 0 5px;
 	line-height: 15px;
 }
 
 .outext {
+	box-sizing: border-box;
 	height: 30px;
 	width: 100%;
 	line-height: 30px;
-	padding: 0 10px;
+	padding: 0 20px;
+	word-wrap:break-word; 
+	word-break:break-all;
+}
+
+.outspan {
+	font-size: 18px;
+	height: 30px;
+	line-height: 30px;
+}
+
+.background {
+	background-color: #fff;	
+}
+
+.normal {
+	font-style: normal;
+}
+
+.h1 {
+	font-size: 32px;
+}
+
+.h1 {
+	font-size: 32px;
+}
+
+.h2 {
+	font-size: 28px;
+}
+
+.h3 {
+	font-size: 24px;
+}
+
+.h4 {
 	font-size: 20px;
+}
+
+.h5 {
+	font-size: 16px;
+}
+
+.h6 {
+	font-size: 12px;
+}
+
+.quoteInline {
+	background-color: palevioletred;
+}
+
+.italic {
+	font-style: italic;
 }
