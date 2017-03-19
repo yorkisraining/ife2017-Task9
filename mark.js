@@ -51,7 +51,8 @@ function mark(row) {
 		if (e.keyCode == 8) {
 			var nowt = parseInt($('#textarea').css('top'));
 			var i = $('.inspan:eq(' + nowt/15 + ')').html();
-			var val = $('inspan:eq('+ (nowt/15-1) + ')').html(val);
+			var val = $('.inspan:eq('+ (nowt/15-1) + ')').html();
+			
 			if (i == '' && nowt/15 != 0) {
 				//拦截删除
 				e.cancelBubble = true;
