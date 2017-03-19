@@ -124,45 +124,45 @@ function showContent() {
 		var ols = /\d+\.\s+\S+/.test(vals);
 		var italic = /(\*|\-)+(\s)*\S+(\s)*(\*|\-)+/.test(vals);
 		var quoteInline = /(`+)\s*\S+\s*(`+)/.test(vals);
-		if(h1) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h1 outext background normal');
-			vals = val.replace(/#+/, '');
-		}
-		if(h2) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h2 outext background normal');
-			vals = val.replace(/#+/, '');
-		}
-		if(h3) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h3 outext background normal');
-			vals = val.replace('###', '');
-		}
-		if(h4) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h4 outext background normal');
-			vals = val.replace(/#+/, '');
-		}
-		if(h5) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h5 outext background normal');
-			vals = val.replace(/#+/, '');
-		}
-		if(h6) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('h6 outext background normal');
-			vals = val.replace(/#+/, '');
-		}
-		if(italic) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('italic outext background');
-			vals = val.replace(/(\*|\-)+([^"]*)(\*|\-)/, '$2');
-		}
-		if(quoteInline) {
-			$('.outspan:eq(' + t + ')').removeClass();
-			$('.outspan:eq(' + t + ')').addClass('quoteInline outext normal');
-			vals = val.replace(/`+([^"]*)`+/, '$1');
+		if (h1 || h2 || h3 || h4 || h5 || h6 || italic || quoteInline) {
+			if(h1) {
+				$('.outspan:eq(' + t + ')').css('font-size', 32);
+				vals = val.replace(/#/, '');
+			}
+			if(h2) {
+				$('.outspan:eq(' + t + ')').css('font-size', 28);
+				vals = val.replace(/#{2}/, '');
+			}
+			if(h3) {
+				$('.outspan:eq(' + t + ')').css('font-size', 24);
+				vals = val.replace(/#{3}/, '');
+			}
+			if(h4) {
+				$('.outspan:eq(' + t + ')').css('font-size', 20);
+				vals = val.replace(/#{4}/, '');
+			}
+			if(h5) {
+				$('.outspan:eq(' + t + ')').css('font-size', 16);
+				vals = val.replace(/#{5}/, '');
+			}
+			if(h6) {
+				$('.outspan:eq(' + t + ')').css('font-size', 12);
+				vals = val.replace(/#{6}/, '');
+			}
+			if(italic) {
+				$('.outspan:eq(' + t + ')').css('font-style', 'italic');
+				vals = val.replace(/(\*|\-)+([^"]*)(\*|\-)/, '$2');
+			}
+			if(quoteInline) {
+				$('.outspan:eq(' + t + ')').css('background', 'palevioletred');
+				vals = val.replace(/`+([^"]*)`+/, '$1');
+			}
+		} else {
+			$('.outspan:eq(' + t + ')').css({
+				'background': '#fff',
+				'font-size': 18,
+				'font-style': 'normal'
+			});
 		}
 		$('.outspan:eq(' + t + ')').html(vals);
 	});
