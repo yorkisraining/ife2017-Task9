@@ -44,7 +44,7 @@ function mark(row) {
 			// 添加列表数字
 			$('.row-num').append('<div class="nums">' + row.length + '</div>');
 			//添加右侧div
-			$('.output:eq(0)').append('<div class="outext"><span class="outspan"></span></div>');
+			$('.output:eq(0)').append('<div class="outext"></div>');
 		}
 		
 		// backspace
@@ -111,61 +111,47 @@ function showContent() {
 		var t = parseInt($('#textarea').css('top'))/15;
 		var val = $('.inspan:eq(' + t + ')').html();
 		var vals = val;
-		//正则匹配
-		//h1
-		var h1 = /#\S{1,}/.test(vals);
-		var h2 = /#{2}\S{1,}/.test(vals);
-		var h3 = /#{3}\S{1,}/.test(vals);
-		var h4 = /#{4}\S{1,}/.test(vals);
-		var h5 = /#{5}\S{1,}/.test(vals);
-		var h6 = /#{6}\S{1,}/.test(vals);
-		var p = /<p>\S+<\/p>/.test(vals);
+		//正则
+		var head = /#\S+/.test(vals);
 		var br = /\S+(<\/br>)/.test(vals);
 		var lis = /(\*|\-|\+)\s+\S+/.test(vals);
-		var ols = /\d+\.\s+\S+/.test(vals);
+		var ols = /\d+\.\s+\S+/;
 		var italic = /(\*|\-)+(\s)*\S+(\s)*(\*|\-)+/.test(vals);
 		var quoteInline = /(`+)\s*\S+\s*(`+)/.test(vals);
-		if (h1 || h2 || h3 || h4 || h5 || h6 || italic || quoteInline) {
-			if(h1) {
-				$('.outspan:eq(' + t + ')').css('font-size', 32);
-				vals = val.replace(/#/, '');
-			}
-			if(h2) {
-				$('.outspan:eq(' + t + ')').css('font-size', 28);
-				vals = val.replace(/#{2}/, '');
-			}
-			if(h3) {
-				$('.outspan:eq(' + t + ')').css('font-size', 24);
-				vals = val.replace(/#{3}/, '');
-			}
-			if(h4) {
-				$('.outspan:eq(' + t + ')').css('font-size', 20);
-				vals = val.replace(/#{4}/, '');
-			}
-			if(h5) {
-				$('.outspan:eq(' + t + ')').css('font-size', 16);
-				vals = val.replace(/#{5}/, '');
-			}
-			if(h6) {
-				$('.outspan:eq(' + t + ')').css('font-size', 12);
-				vals = val.replace(/#{6}/, '');
-			}
-			if(italic) {
-				$('.outspan:eq(' + t + ')').css('font-style', 'italic');
+		//if (head || italic || quoteInline || ) {
+			if (head) {
+				//标题
+				var i = vals.search(/[^#]/);
+				i = i > 6 ? 6 : i;
+				$('.outext:eq(' + t + ')').html('<h' + i + '>' + vals.substring(i) + '</h>');
+			} else if(italic) {
+				//强调
 				vals = val.replace(/(\*|\-)+([^"]*)(\*|\-)/, '$2');
-			}
-			if(quoteInline) {
-				$('.outspan:eq(' + t + ')').css('background', 'palevioletred');
-				vals = val.replace(/`+([^"]*)`+/, '$1');
-			}
-		} else {
-			$('.outspan:eq(' + t + ')').css({
+				$('.outext:eq(' + t + ')').html('<span>' + vals + '</span>');
+				$('.outext:eq(' + t + ')').css('font-style', 'italic');
+			} else if(quoteInline) {
+				//行级引用
+				vals = val.replace(/`+([/S]*)`+/g, '$2');
+				$('.outext:eq(' + t + ')').html('<span>' + vals + '</span>');	
+				$('.outext:eq(' + t + ')>span').css('background', 'palevioletred');
+			} else if (lis) {
+				//无序列表
+				vals = val.replace(/\*|\-|\+/, '');
+				$('.outext:eq(' + t + ')').html('<ul><li>' + vals + '</li></ul?');
+			} else if (ols.test(vals)) {
+				//有序列表
+				var regx = /\d*/
+				num = regx.exec(val);
+				vals = val.replace(/\d*\.\s*/, '');
+				$('.outext:eq(' + t + ')').html('<ol><li>' + vals + '</li></ol>');
+			} else {
+			$('.outext:eq(' + t + ')').css({
 				'background': '#fff',
 				'font-size': 18,
 				'font-style': 'normal'
 			});
+			$('.outext:eq(' + t + ')').html(vals);
 		}
-		$('.outspan:eq(' + t + ')').html(vals);
 	});
 }
 
@@ -175,8 +161,6 @@ function mouseClick(row) {
 		var e = e || window.event;
 		var t = Math.floor(e.clientY / 15);
 		var val = $('.inspan:eq(' + t +')').html();
-		console.log(t);
-		console.log(val);
 		if (t < row.length) {
 			$('#textarea').css('top', t*15);
 			$('#textarea').val(val);

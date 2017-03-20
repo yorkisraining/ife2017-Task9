@@ -1,7 +1,6 @@
 * {
 	margin: 0;
 	padding: 0;
-	font-size: 12px;
 	font-family: "微软雅黑";
 }
 			
@@ -13,6 +12,7 @@
 	width: 50%;
 	background: #272822;
 	position: absolute;
+	font-size: 12px;
 }
 			
 .output {
@@ -68,6 +68,7 @@
 	outline: none;
 	padding: 0 5px;
 	box-sizing: border-box;
+	font-size: 12px;
 }
 
 .inspan {
@@ -92,46 +93,3 @@
 	line-height: 30px;
 }
 
-.background {
-	background-color: #fff;	
-}
-
-.normal {
-	font-style: normal;
-}
-
-.h1 {
-	font-size: 32px;
-}
-
-.h1 {
-	font-size: 32px;
-}
-
-.h2 {
-	font-size: 28px;
-}
-
-.h3 {
-	font-size: 24px;
-}
-
-.h4 {
-	font-size: 20px;
-}
-
-.h5 {
-	font-size: 16px;
-}
-
-.h6 {
-	font-size: 12px;
-}
-
-.quoteInline {
-	background-color: palevioletred;
-}
-
-.italic {
-	font-style: italic;
-}
