@@ -10,7 +10,9 @@ window.onload = function() {
 	});
 	
 	var row = [];
-	row[0] = $('.nums')[0];
+	for (var i=0; i<$('.rows').length; i++) {
+		row[i] = $('.rows')[0];
+	}
 	
 	mark(row);
 	addText(row);
@@ -114,11 +116,30 @@ function showContent() {
 		//正则
 		var head = /#\S+/.test(vals);
 		var br = /\S+(<\/br>)/.test(vals);
-		var lis = /(\*|\-|\+)\s+\S+/.test(vals);
+		var lis = /(\*|\-|\+)\s+\S+/;
 		var ols = /\d+\.\s+\S+/;
-		var italic = /(\*|\-)+(\s)*\S+(\s)*(\*|\-)+/.test(vals);
+		var pic = /!\[\S+\]\([a-zA-z]+:\/\/[^\s]*\)/.test(vals);
+		var web = /\[\S+\]\([a-zA-z]+:\/\/[^\s]*\)/.test(vals);
+		var italic = /(\*|\-)+\S+(\*|\-)+/.test(vals);
 		var quoteInline = /(`+)\s*\S+\s*(`+)/.test(vals);
-		//if (head || italic || quoteInline || ) {
+		
+		if (pic || web) {
+			var a = /\(\S+\)/;
+			var src = a.exec(vals)[0].replace(/\(/, '').replace(/\)/, '');
+			var b = /\[\S+\]/;
+			var name = b.exec(vals)[0].replace(/\[/, '').replace(/\]/, '');
+			var isImg = /\!./.test(vals);
+			if (isImg) {
+				//图片引用
+				$('.outext:eq(' + t + ')').html(name + '<img src="' + src + '" />');
+				$('.outext:eq(' + t + ')').removeClass('height');
+			} else {
+				//链接
+				$('.outext:eq(' + t + ')').html('<a href="' + src + '" >' + name + '</a>');
+				$('.outext:eq(' + t + ')').addClass('height');
+			}
+		} else {
+			$('.outext:eq(' + t + ')').addClass('height');
 			if (head) {
 				//标题
 				var i = vals.search(/[^#]/);
@@ -126,31 +147,38 @@ function showContent() {
 				$('.outext:eq(' + t + ')').html('<h' + i + '>' + vals.substring(i) + '</h>');
 			} else if(italic) {
 				//强调
-				vals = val.replace(/(\*|\-)+([^"]*)(\*|\-)/, '$2');
+				vals = val.replace(/(\*|\-)+/, '').replace(/(\*|\-)+/, '');
 				$('.outext:eq(' + t + ')').html('<span>' + vals + '</span>');
 				$('.outext:eq(' + t + ')').css('font-style', 'italic');
 			} else if(quoteInline) {
 				//行级引用
-				vals = val.replace(/`+([/S]*)`+/g, '$2');
+				vals = val.replace(/`+/, '').replace(/`+/, '');
 				$('.outext:eq(' + t + ')').html('<span>' + vals + '</span>');	
 				$('.outext:eq(' + t + ')>span').css('background', 'palevioletred');
-			} else if (lis) {
-				//无序列表
-				vals = val.replace(/\*|\-|\+/, '');
-				$('.outext:eq(' + t + ')').html('<ul><li>' + vals + '</li></ul?');
-			} else if (ols.test(vals)) {
-				//有序列表
-				var regx = /\d*/
-				num = regx.exec(val);
-				vals = val.replace(/\d*\.\s*/, '');
-				$('.outext:eq(' + t + ')').html('<ol><li>' + vals + '</li></ol>');
+//			} else if (lis.test(vals)) {
+//				//无序列表
+//				//先remove掉下一行，判断textarea上一行是否为列表，存在则在本行添加不存在则添加ul
+//				var last = $('.inspan:eq(' + (t-1) + ')').html();
+//				var isLi = lis.test(last);
+//				vals = val.replace(/\*|\-|\+/, '');
+//				if (isLi) {
+//					$('.outext:eq(' + (t-1) + ')>ul:eq(0)').append('<li>' + vals + '</li>');
+//					$('.outext:eq(' + t + ')').html('');
+//					$('.outext:eq(' + t + ')').class('');
+//				} else {
+//					$('.outext:eq(' + t + ')').html('<ul><li>' + vals + '</li></ul>');
+//				}
+//			} else if (ols.test(vals)) {
+//				
 			} else {
-			$('.outext:eq(' + t + ')').css({
-				'background': '#fff',
-				'font-size': 18,
-				'font-style': 'normal'
-			});
-			$('.outext:eq(' + t + ')').html(vals);
+				//正常情况
+				$('.outext:eq(' + t + ')').css({
+					'background': '#fff',
+					'font-size': 18,
+					'font-style': 'normal'
+				});
+				$('.outext:eq(' + t + ')').html(vals);
+			}
 		}
 	});
 }

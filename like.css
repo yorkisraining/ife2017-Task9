@@ -79,12 +79,15 @@
 
 .outext {
 	box-sizing: border-box;
-	height: 30px;
 	width: 100%;
 	line-height: 30px;
 	padding: 0 20px;
 	word-wrap:break-word; 
 	word-break:break-all;
+}
+
+.height {
+	height: 30px;
 }
 
 .outspan {
